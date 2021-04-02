@@ -3,16 +3,17 @@
 
 #include "segment.h"
 
-class CourbeParamtrique : public Segment
+class CourbeBezier
 {
 public:
-    CourbeParamtrique(Point p0, Point p1, Point p2, Point p3);
-    CourbeParamtrique(Point points[]);
-    QVector<Point> *parcours();
+    CourbeBezier(Point p0, Point p1, Point p2, Point p3);
+    CourbeBezier(Point points[]);
     QVector<Point> *parcoursBerstein();
     QVector<Point> *parcoursCarreauBerstein();
 
 private:
+    int nbPoint;
+
     struct ListPoint {
         Point points[4];
     };
@@ -49,10 +50,6 @@ private:
     ListCarrPoint listCarrPoint;
 
     Point getCarrpoint(int i, int j);
-
-    Point bezierPoint(float t, Point p0, Point p1, Point p2, Point p3);
-
-    QVector<Point> * discretisation(float nbPoint);
 };
 
 #endif // COUBREBEZIER_H

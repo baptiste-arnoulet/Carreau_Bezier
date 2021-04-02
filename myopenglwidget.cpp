@@ -198,13 +198,13 @@ void myOpenGLWidget::makeGLSegment(Point start, Point end)
 
 void myOpenGLWidget::makeGLBezierCurve(Point p0, Point p1, Point p2, Point p3)
 {
-    CourbeParamtrique *cp = new CourbeParamtrique(p0, p1, p2, p3);
+    CourbeBezier *cp = new CourbeBezier(p0, p1, p2, p3);
     allBezierPoints->append(*cp->parcoursBerstein());
 }
 
 void myOpenGLWidget::makeGLBezierCarr(Point points[])
 {
-    CourbeParamtrique *cp = new CourbeParamtrique(points);
+    CourbeBezier *cp = new CourbeBezier(points);
     allBezierPoints->append(*cp->parcoursCarreauBerstein());
 }
 

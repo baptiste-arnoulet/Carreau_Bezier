@@ -3,35 +3,26 @@
 
 #include "coubreBezier.h"
 
-CourbeParamtrique::CourbeParamtrique(Point p0, Point p1, Point p2, Point p3) : Segment()
+CourbeBezier::CourbeBezier(Point p0, Point p1, Point p2, Point p3)
 {
     listPoint.points[0] = p0;
     listPoint.points[1] = p1;
     listPoint.points[2] = p2;
     listPoint.points[3] = p3;
+
+    nbPoint = 50;
 }
 
-CourbeParamtrique::CourbeParamtrique(Point points[])
+CourbeBezier::CourbeBezier(Point points[])
 {
     for (int i =0; i<16; i++) {
         listCarrPoint.points[i] = points[i];
     }
+
+    nbPoint = 50;
 }
 
-QVector<Point> *CourbeParamtrique::parcours()
-{
-    float t;
-    QVector<Point> *res = new QVector<Point>;
-
-    for (int i = 0; i < nbPoint; i++) {
-        t = (float)i/(float)nbPoint;
-        res->append(bezierPoint(t, listPoint.points[0],listPoint.points[1],listPoint.points[2],listPoint.points[3] ));
-    }
-
-    return res;
-}
-
-QVector<Point> *CourbeParamtrique::parcoursBerstein()
+QVector<Point> *CourbeBezier::parcoursBerstein()
 {
     float t;
     QVector<Point> *res = new QVector<Point>;
@@ -59,7 +50,7 @@ QVector<Point> *CourbeParamtrique::parcoursBerstein()
     return res;
 }
 
-QVector<Point> *CourbeParamtrique::parcoursCarreauBerstein()
+QVector<Point> *CourbeBezier::parcoursCarreauBerstein()
 {
     float u,v;
     int n = 3, m = 3;
@@ -95,40 +86,13 @@ QVector<Point> *CourbeParamtrique::parcoursCarreauBerstein()
     return res;
 }
 
-float CourbeParamtrique::berstein(int i, int n, float t)
+float CourbeBezier::berstein(int i, int n, float t)
 {
     return ((facto(n)/(facto(i)*facto(n-i))) * expo(t,i) * expo((1-t),(n-i)));
 }
 
-Point CourbeParamtrique::getCarrpoint(int i, int j)
+Point CourbeBezier::getCarrpoint(int i, int j)
 {
     int index = i + (j*4);
     return listCarrPoint.points[index];
-}
-
-Point CourbeParamtrique::bezierPoint(float t, Point p0, Point p1, Point p2, Point p3)
-{
-    Point p;
-
-    float * coord = new float[3];
-    coord[0] = (1-t)*(1-t)*(1-t)*p0.getX()+3*t*(1-t)*(1-t)*p1.getX()+3*t*t*(1-t)*p2.getX()+t*t*t*p3.getX();
-    coord[1] = (1-t)*(1-t)*(1-t)*p0.getY()+3*t*(1-t)*(1-t)*p1.getY()+3*t*t*(1-t)*p2.getY()+t*t*t*p3.getY();
-    coord[2] = (1-t)*(1-t)*(1-t)*p0.getZ()+3*t*(1-t)*(1-t)*p1.getZ()+3*t*t*(1-t)*p2.getZ()+t*t*t*p3.getZ();
-
-    p.set(coord);
-
-    return p;
-}
-
-QVector<Point> *CourbeParamtrique::discretisation(float nbPoint)
-{
-    float pourcent = 100/nbPoint;
-    qDebug() << "pourcent" << pourcent;
-
-    for (int i = 0; i<nbPoint; i++) {
-        Point p = getValue(i*pourcent);
-        points->append(p);
-    }
-
-    return points;
 }
