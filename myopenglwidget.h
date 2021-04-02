@@ -51,6 +51,7 @@ private:
 	double m_angle = 0;
 	QTimer *m_timer = nullptr;
 	double m_ratio = 1;
+    int nbPoint = 20;
 
     struct Point3D{
         double x,y,z;
@@ -70,7 +71,8 @@ private:
 
     void makeGLSegment(Point start, Point end);
     void makeGLBezierCurve(Point p0, Point p1, Point p2, Point p3, int presision);
-    void makeGLBezierCarr(Point points[16], int presision);
+    void makeGLBezierCarr(QVector<Point> *points, int presision);
+    void makeGLForm();
 	void tearGLObjects();
     void prepareOpenGl(QVector<Point> controlPoints, QVector<Point> bezierPoints);
 };

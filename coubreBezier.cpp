@@ -13,23 +13,21 @@ CourbeBezier::CourbeBezier(Point p0, Point p1, Point p2, Point p3, int nbPoint)
     this->nbPoint = nbPoint;
 }
 
-CourbeBezier::CourbeBezier(Point points[], int nbPoint, int n, int m)
+CourbeBezier::CourbeBezier(QVector<Point> *points, int nbPoint, int n, int m)
 {
     this->n = n;
     this->m = m;
 
-    for (int i =0; i<(n+1)*(m+1); i++) {
-        listCarrPoint.vecPoints->append(points[i]);
-    }
+    listCarrPoint.vecPoints = points;
 
     for (int i = 0; i<=n; i++) {
-        border1.points[i] = points[i];
-        border4.points[i] = points[i+(m*(n+1))];
+        border1.points[i] = listCarrPoint.vecPoints->value(i);
+        border4.points[i] = listCarrPoint.vecPoints->value(i+(m*(n+1)));
     }
 
     for (int i = 0; i<=m; i++) {
-        border2.points[i] = points[i*(n+1)];
-        border3.points[i] = points[n+(i*(n+1))];
+        border2.points[i] = listCarrPoint.vecPoints->value(i*(n+1));
+        border3.points[i] = listCarrPoint.vecPoints->value(n+(i*(n+1)));
     }
 
     listPoint = border1;

@@ -61,93 +61,12 @@ void myOpenGLWidget::initializeGL()
 	glEnable(GL_DEPTH_TEST);
 
     // Point de controle
-    Point p0;
-    p0.set(new float[3]{-0.75 ,-0.5, 0.75});
 
-    Point p1;
-    p1.set(new float[3]{-0.25,0.0,0.75});
 
-    Point p2;
-    p2.set(new float[3]{0.25,0.0,0.75});
+    //Point carrPoints2[12] = {p0,p1,p2,p4,p5,p6,p8,p9,p10,p12,p13,p14};
+    //Point carrPoints[16] = {p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15};
 
-    Point p3;
-    p3.set(new float[3]{0.75,-0.5,0.75});
-
-    Point p4;
-    p4.set(new float[3]{-0.75 ,0.0, 0.25});
-
-    Point p5;
-    p5.set(new float[3]{-0.25,0.5,0.25});
-
-    Point p6;
-    p6.set(new float[3]{0.25,0.5,0.25});
-
-    Point p7;
-    p7.set(new float[3]{0.75,0.0,0.25});
-
-    Point p8;
-    p8.set(new float[3]{-0.75 ,0.0, -0.25});
-
-    Point p9;
-    p9.set(new float[3]{-0.25,0.5,-0.25});
-
-    Point p10;
-    p10.set(new float[3]{0.25,0.5,-0.25});
-
-    Point p11;
-    p11.set(new float[3]{0.75,0.0,-0.25});
-
-    Point p12;
-    p12.set(new float[3]{-0.75 ,-0.5, -0.75});
-
-    Point p13;
-    p13.set(new float[3]{-0.25,0.0,-0.75});
-
-    Point p14;
-    p14.set(new float[3]{0.25,0.0,-0.75});
-
-    Point p15;
-    p15.set(new float[3]{0.75,-0.5,-0.75});
-
-    Point carrPoints2[12] = {p0,p1,p2,p4,p5,p6,p8,p9,p10,p12,p13,p14};
-    Point carrPoints[16] = {p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15};
-
-    // Segment de contrôles
-    makeGLSegment(p0, p1);
-    makeGLSegment(p1, p2);
-    makeGLSegment(p2, p3);
-
-    makeGLSegment(p4, p5);
-    makeGLSegment(p5, p6);
-    makeGLSegment(p6, p7);
-
-    makeGLSegment(p8, p9);
-    makeGLSegment(p9, p10);
-    makeGLSegment(p10, p11);
-
-    makeGLSegment(p12, p13);
-    makeGLSegment(p13, p14);
-    makeGLSegment(p14, p15);
-
-    makeGLSegment(p0, p4);
-    makeGLSegment(p1, p5);
-    makeGLSegment(p2, p6);
-    makeGLSegment(p3, p7);
-
-    makeGLSegment(p4, p8);
-    makeGLSegment(p5, p9);
-    makeGLSegment(p6, p10);
-    makeGLSegment(p7, p11);
-
-    makeGLSegment(p8, p12);
-    makeGLSegment(p9, p13);
-    makeGLSegment(p10, p14);
-    makeGLSegment(p11, p15);
-
-    // Carreau de bezier
-    makeGLBezierCarr(carrPoints, 20);
-
-    prepareOpenGl(*allControlPoints, *allBezierPoints);
+    makeGLForm();
 
 	//shaders
 	m_program = new QOpenGLShaderProgram(this);
@@ -207,10 +126,103 @@ void myOpenGLWidget::makeGLBezierCurve(Point p0, Point p1, Point p2, Point p3, i
 }
 
 // Pour dessiner un carreau de bezier de degrés 3 * 3
-void myOpenGLWidget::makeGLBezierCarr(Point points[], int presision)
+void myOpenGLWidget::makeGLBezierCarr(QVector<Point> *points, int presision)
 {
     CourbeBezier *cp = new CourbeBezier(points, presision,3,3);
     allBezierPoints->append(*cp->parcoursCarreauBerstein());
+}
+
+void myOpenGLWidget::makeGLForm()
+{
+    allControlPoints->clear();
+    allBezierPoints->clear();
+
+    Point p0;
+    p0.set(new float[3]{-0.75 ,-0.5, 0.75});
+
+    Point p1;
+    p1.set(new float[3]{-0.25,0.0,0.75});
+
+    Point p2;
+    p2.set(new float[3]{0.25,0.0,0.75});
+
+    Point p3;
+    p3.set(new float[3]{0.75,-0.5,0.75});
+
+    Point p4;
+    p4.set(new float[3]{-0.75 ,0.0, 0.25});
+
+    Point p5;
+    p5.set(new float[3]{-0.25,0.5,0.25});
+
+    Point p6;
+    p6.set(new float[3]{0.25,0.5,0.25});
+
+    Point p7;
+    p7.set(new float[3]{0.75,0.0,0.25});
+
+    Point p8;
+    p8.set(new float[3]{-0.75 ,0.0, -0.25});
+
+    Point p9;
+    p9.set(new float[3]{-0.25,0.5,-0.25});
+
+    Point p10;
+    p10.set(new float[3]{0.25,0.5,-0.25});
+
+    Point p11;
+    p11.set(new float[3]{0.75,0.0,-0.25});
+
+    Point p12;
+    p12.set(new float[3]{-0.75 ,-0.5, -0.75});
+
+    Point p13;
+    p13.set(new float[3]{-0.25,0.0,-0.75});
+
+    Point p14;
+    p14.set(new float[3]{0.25,0.0,-0.75});
+
+    Point p15;
+    p15.set(new float[3]{0.75,-0.5,-0.75});
+
+    // Segment de contrôles
+    makeGLSegment(p0, p1);
+    makeGLSegment(p1, p2);
+    makeGLSegment(p2, p3);
+
+    makeGLSegment(p4, p5);
+    makeGLSegment(p5, p6);
+    makeGLSegment(p6, p7);
+
+    makeGLSegment(p8, p9);
+    makeGLSegment(p9, p10);
+    makeGLSegment(p10, p11);
+
+    makeGLSegment(p12, p13);
+    makeGLSegment(p13, p14);
+    makeGLSegment(p14, p15);
+
+    makeGLSegment(p0, p4);
+    makeGLSegment(p1, p5);
+    makeGLSegment(p2, p6);
+    makeGLSegment(p3, p7);
+
+    makeGLSegment(p4, p8);
+    makeGLSegment(p5, p9);
+    makeGLSegment(p6, p10);
+    makeGLSegment(p7, p11);
+
+    makeGLSegment(p8, p12);
+    makeGLSegment(p9, p13);
+    makeGLSegment(p10, p14);
+    makeGLSegment(p11, p15);
+
+    QVector<Point> *carrPoints = new QVector<Point>{p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15};
+
+    // Carreau de bezier
+    makeGLBezierCarr(carrPoints, nbPoint);
+
+    prepareOpenGl(*allControlPoints, *allBezierPoints);
 }
 
 
@@ -273,6 +285,8 @@ void myOpenGLWidget::paintGL()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+
 	m_program->bind(); // active le shader program
 
 
@@ -331,6 +345,20 @@ void myOpenGLWidget::keyPressEvent(QKeyEvent *ev)
 				m_timer->stop();
 			else m_timer->start();
 			break;
+        case Qt::Key_F :
+            nbPoint -= 1;
+
+            makeGLForm();
+
+            update();
+            break;
+        case Qt::Key_G :
+            nbPoint += 1;
+
+            makeGLForm();
+
+            update();
+            break;
 		case Qt::Key_R :
 			break;
 	}
