@@ -6,8 +6,8 @@
 class CourbeBezier
 {
 public:
-    CourbeBezier(Point p0, Point p1, Point p2, Point p3);
-    CourbeBezier(Point points[]);
+    CourbeBezier(Point p0, Point p1, Point p2, Point p3, int nbPoint);
+    CourbeBezier(Point points[], int nbPoint);
     QVector<Point> *parcoursBerstein();
     QVector<Point> *parcoursCarreauBerstein();
 

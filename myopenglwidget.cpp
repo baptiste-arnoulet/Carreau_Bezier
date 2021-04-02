@@ -60,6 +60,7 @@ void myOpenGLWidget::initializeGL()
 	initializeOpenGLFunctions();
 	glEnable(GL_DEPTH_TEST);
 
+    // Point de controle
     Point p0;
     p0.set(new float[3]{-0.75 ,-0.5, 0.75});
 
@@ -110,6 +111,7 @@ void myOpenGLWidget::initializeGL()
 
     Point carrPoints[16] = {p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15};
 
+    // Segment de contrôles
     makeGLSegment(p0, p1);
     makeGLSegment(p1, p2);
     makeGLSegment(p2, p3);
@@ -141,8 +143,8 @@ void myOpenGLWidget::initializeGL()
     makeGLSegment(p10, p14);
     makeGLSegment(p11, p15);
 
-    makeGLBezierCarr(carrPoints);
-
+    // Carreau de bezier
+    makeGLBezierCarr(carrPoints, 20);
 
     prepareOpenGl(*allControlPoints, *allBezierPoints);
 
@@ -163,7 +165,7 @@ void myOpenGLWidget::doProjection()
 	//modelMatrix.ortho( -aratio, aratio, -1.0f, 1.0f, -1.0f, 1.0f );
 }
 
-
+// Pour dessiner un segment
 void myOpenGLWidget::makeGLSegment(Point start, Point end)
 {
 	//1 Nos objets géométriques
@@ -196,15 +198,17 @@ void myOpenGLWidget::makeGLSegment(Point start, Point end)
     }
 }
 
-void myOpenGLWidget::makeGLBezierCurve(Point p0, Point p1, Point p2, Point p3)
+// Pour dessiner une courbe de bezier avec 4 point de contrôles
+void myOpenGLWidget::makeGLBezierCurve(Point p0, Point p1, Point p2, Point p3, int presision)
 {
-    CourbeBezier *cp = new CourbeBezier(p0, p1, p2, p3);
+    CourbeBezier *cp = new CourbeBezier(p0, p1, p2, p3, presision);
     allBezierPoints->append(*cp->parcoursBerstein());
 }
 
-void myOpenGLWidget::makeGLBezierCarr(Point points[])
+// Pour dessiner un carreau de bezier de degrés 3 * 3
+void myOpenGLWidget::makeGLBezierCarr(Point points[], int presision)
 {
-    CourbeBezier *cp = new CourbeBezier(points);
+    CourbeBezier *cp = new CourbeBezier(points, presision);
     allBezierPoints->append(*cp->parcoursCarreauBerstein());
 }
 
