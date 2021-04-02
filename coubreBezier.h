@@ -7,19 +7,20 @@ class CourbeBezier
 {
 public:
     CourbeBezier(Point p0, Point p1, Point p2, Point p3, int nbPoint);
-    CourbeBezier(Point points[], int nbPoint);
+    CourbeBezier(Point points[], int nbPoint, int n, int m);
     QVector<Point> *parcoursBerstein();
     QVector<Point> *parcoursCarreauBerstein();
 
 private:
     int nbPoint;
+    int n, m;
 
     struct ListPoint {
         Point points[4];
     };
 
     struct ListCarrPoint {
-        Point points[16];
+        QVector<Point> *vecPoints = new QVector<Point>;
     };
 
     float facto(float a) {
