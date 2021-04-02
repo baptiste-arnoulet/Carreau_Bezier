@@ -23,7 +23,7 @@ myOpenGLWidget::myOpenGLWidget(QWidget *parent) :
     allControlPoints = new QVector<Point>;
     allBezierPoints = new QVector<Point>;
 
-    mode_aff = Mode_aff::points;
+    mode_aff = Mode_aff::lines;
 
 	QSurfaceFormat sf;
 	sf.setDepthBufferSize(24);
@@ -142,10 +142,10 @@ void myOpenGLWidget::initializeGL()
     makeGLSegment(p11, p15);
 
 
-    makeGLBezierCurve(p0,p1,p2,p3);
-    makeGLBezierCurve(p0,p4,p8,p12);
-    makeGLBezierCurve(p3,p7,p11,p15);
-    makeGLBezierCurve(p12,p13,p14,p15);
+    //makeGLBezierCurve(p0,p1,p2,p3);
+    //makeGLBezierCurve(p0,p4,p8,p12);
+    //makeGLBezierCurve(p3,p7,p11,p15);
+    //makeGLBezierCurve(p12,p13,p14,p15);
 
     makeGLBezierCarr(carrPoints);
 
