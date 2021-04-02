@@ -23,6 +23,9 @@ myOpenGLWidget::myOpenGLWidget(QWidget *parent) :
     allControlPoints = new QVector<Point>;
     allBezierPoints = new QVector<Point>;
 
+    n = 3;
+    m = 3;
+
     mode_aff = Mode_aff::lines;
 
 	QSurfaceFormat sf;
@@ -121,14 +124,14 @@ void myOpenGLWidget::makeGLSegment(Point start, Point end)
 // Pour dessiner une courbe de bezier avec 4 point de contrôles
 void myOpenGLWidget::makeGLBezierCurve(Point p0, Point p1, Point p2, Point p3, int presision)
 {
-    CourbeBezier *cp = new CourbeBezier(p0, p1, p2, p3, presision);
+    cp = new CourbeBezier(p0, p1, p2, p3, presision);
     allBezierPoints->append(*cp->parcoursBerstein());
 }
 
 // Pour dessiner un carreau de bezier de degrés 3 * 3
 void myOpenGLWidget::makeGLBezierCarr(QVector<Point> *points, int presision)
 {
-    CourbeBezier *cp = new CourbeBezier(points, presision,3,3);
+    cp = new CourbeBezier(points, presision,n,m);
     allBezierPoints->append(*cp->parcoursCarreauBerstein());
 }
 
@@ -217,12 +220,14 @@ void myOpenGLWidget::makeGLForm()
     makeGLSegment(p10, p14);
     makeGLSegment(p11, p15);
 
+
+
     QVector<Point> *carrPoints = new QVector<Point>{p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15};
 
     // Carreau de bezier
     makeGLBezierCarr(carrPoints, nbPoint);
 
-    prepareOpenGl(*allControlPoints, *allBezierPoints);
+    prepareOpenGl(getBezierPoint(u,v), *allControlPoints, *allBezierPoints);
 }
 
 
@@ -231,9 +236,18 @@ void myOpenGLWidget::tearGLObjects()
     m_vbo.destroy();
 }
 
-void myOpenGLWidget::prepareOpenGl(QVector<Point> controlPoints, QVector<Point> bezierPoints)
+void myOpenGLWidget::prepareOpenGl(Point p, QVector<Point> controlPoints, QVector<Point> bezierPoints)
 {
     QVector<GLfloat> vertData;
+
+    vertData.append(p.getX());
+    vertData.append(p.getY());
+    vertData.append(p.getZ());
+    vertData.append(0.0);
+    vertData.append(0.0);
+    vertData.append(1.0);
+
+
     GLfloat * colors = new GLfloat[3];
     colors[0] = 1.0;
     colors[1] = 0.0;
@@ -265,6 +279,11 @@ void myOpenGLWidget::prepareOpenGl(QVector<Point> controlPoints, QVector<Point> 
     m_vbo.bind();
 
     m_vbo.allocate(vertData.constData(), vertData.count() * sizeof(GLfloat));
+}
+
+Point myOpenGLWidget::getBezierPoint(float u, float v)
+{
+    return cp->get3DPoint(n,m,u,v);
 }
 
 
@@ -318,10 +337,13 @@ void myOpenGLWidget::paintGL()
 
     glPointSize (5.0f);
     glLineWidth(2.0f);
+
+    glDrawArrays(GL_POINTS, 0, 1);
+
     if (mode_aff == Mode_aff::lines) {
-        glDrawArrays(GL_LINES, 0, 50000);
+        glDrawArrays(GL_LINES, 1, 50000);
     } else if (mode_aff == Mode_aff::points) {
-        glDrawArrays(GL_POINTS, 0, 50000);
+        glDrawArrays(GL_POINTS, 1, 50000);
     }
 
 	m_program->disableAttributeArray("posAttr");
@@ -363,7 +385,11 @@ void myOpenGLWidget::keyPressEvent(QKeyEvent *ev)
 			else m_timer->start();
 			break;
         case Qt::Key_F :
+            if (nbPoint<=3) break;
             nbPoint -= 1;
+            p = 1.0/(float) nbPoint;
+            u = 0;
+            v = 0;
 
             makeGLForm();
 
@@ -371,6 +397,44 @@ void myOpenGLWidget::keyPressEvent(QKeyEvent *ev)
             break;
         case Qt::Key_G :
             nbPoint += 1;
+            p = 1.0/(float) nbPoint;
+            u = 0;
+            v = 0;
+
+            makeGLForm();
+
+            update();
+            break;
+        case Qt::Key_U :
+            if (u >= 1) break;
+            u += p;
+
+
+            makeGLForm();
+
+            update();
+            break;
+        case Qt::Key_I :
+            if (u <= 0) break;
+            u -= p;
+
+
+            makeGLForm();
+
+            update();
+            break;
+        case Qt::Key_V :
+            if (v >= 1) break;
+            v += p;
+
+            makeGLForm();
+
+            update();
+            break;
+        case Qt::Key_B :
+            if (v <= 0) break;
+            v -= p;
+
 
             makeGLForm();
 
@@ -398,7 +462,7 @@ void myOpenGLWidget::mouseReleaseEvent(QMouseEvent *ev)
 
 void myOpenGLWidget::mouseMoveEvent(QMouseEvent *ev)
 {
-	qDebug() << __FUNCTION__ << ev->x() << ev->y();
+    qDebug() << __FUNCTION__ << ev->x() << ev->y();
 }
 
 void myOpenGLWidget::onTimeout()

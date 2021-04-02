@@ -12,6 +12,7 @@
 #include <QOpenGLShaderProgram>
 
 #include "point.h"
+#include "coubreBezier.h"
 
 class myOpenGLWidget : public QOpenGLWidget,
 			   protected QOpenGLFunctions
@@ -54,6 +55,9 @@ private:
 	QTimer *m_timer = nullptr;
 	double m_ratio = 1;
     int nbPoint = 20;
+    int n, m;
+    float p = 1.0/(float)nbPoint;
+    float u = 0, v = 0;
     // Coordonnées paramétriques
     float u, v;
 
@@ -70,15 +74,19 @@ private:
     QVector<Point> *allControlPoints;
     QVector<Point> *allBezierPoints;
 
+    Point getBezierPoint(float u, float v);
+
 	QOpenGLShaderProgram *m_program;
     QOpenGLBuffer m_vbo;
+
+    CourbeBezier *cp;
 
     void makeGLSegment(Point start, Point end);
     void makeGLBezierCurve(Point p0, Point p1, Point p2, Point p3, int presision);
     void makeGLBezierCarr(QVector<Point> *points, int presision);
     void makeGLForm();
 	void tearGLObjects();
-    void prepareOpenGl(QVector<Point> controlPoints, QVector<Point> bezierPoints);
+    void prepareOpenGl(Point p, QVector<Point> controlPoints, QVector<Point> bezierPoints);
 };
 
 
