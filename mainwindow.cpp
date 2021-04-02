@@ -32,6 +32,6 @@ void MainWindow::setU(int u)
 
 void MainWindow::setV(int v)
 {
-    this->ui->_v_lbl->setText("t = " + QString::number(v/10.f));
+    this->ui->_v_lbl->setText("v = " + QString::number(v/10.f));
     this->ui->openGLWidget->setV(v/10.f);
 }
