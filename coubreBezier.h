@@ -10,6 +10,8 @@ public:
     CourbeBezier(QVector<Point> *points, int nbPoint, int n, int m);
     QVector<Point> *parcoursBerstein();
     QVector<Point> *parcoursCarreauBerstein();
+    Point get2DPoint(int n, float t);
+    Point get3DPoint(int n, int m, float u, float v);
 
 private:
     int nbPoint;
@@ -55,8 +57,7 @@ private:
     ListCarrPoint listCarrPoint;
 
     Point getCarrpoint(int i, int j);
-    Point get2DPoint(int n, float t);
-    Point get3DPoint(int n, int m, float u, float v);
+
 };
 
 #endif // COUBREBEZIER_H
