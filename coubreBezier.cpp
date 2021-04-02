@@ -25,9 +25,10 @@ CourbeBezier::CourbeBezier(Point points[])
 QVector<Point> *CourbeBezier::parcoursBerstein()
 {
     float t;
+    int n = 3;
     QVector<Point> *res = new QVector<Point>;
 
-    for (int i = 0; i < nbPoint; i++) {
+    for (int i = 1; i < nbPoint-1; i++) {
         t = (float)i/(float)nbPoint;
 
         float * coord = new float[3];
@@ -35,13 +36,30 @@ QVector<Point> *CourbeBezier::parcoursBerstein()
         coord[1] = 0.0;
         coord[2] = 0.0;
 
-        for (int j = 0; j <= 3; j++) {
-            coord[0] += berstein(j,3,t) * listPoint.points[j].getX();
-            coord[1] += berstein(j,3,t) * listPoint.points[j].getY();
-            coord[2] += berstein(j,3,t) * listPoint.points[j].getZ();
+        for (int j = 0; j <= n; j++) {
+            coord[0] += berstein(j,n,t) * listPoint.points[j].getX();
+            coord[1] += berstein(j,n,t) * listPoint.points[j].getY();
+            coord[2] += berstein(j,n,t) * listPoint.points[j].getZ();
         }
 
         Point p;
+        p.set(coord);
+
+        res->append(p);
+
+        t = (float)(i+1)/(float)nbPoint;
+
+        coord[0] = 0.0;
+        coord[1] = 0.0;
+        coord[2] = 0.0;
+
+        for (int j = 0; j <= n; j++) {
+            coord[0] += berstein(j,n,t) * listPoint.points[j].getX();
+            coord[1] += berstein(j,n,t) * listPoint.points[j].getY();
+            coord[2] += berstein(j,n,t) * listPoint.points[j].getZ();
+        }
+
+        Point p2;
         p.set(coord);
 
         res->append(p);
@@ -56,29 +74,96 @@ QVector<Point> *CourbeBezier::parcoursCarreauBerstein()
     int n = 3, m = 3;
     QVector<Point> *res = new QVector<Point>;
 
-    for (int i = 0; i <= nbPoint; i++) {
+    for (int i = 1; i < nbPoint; i++) {
         u = ((float)i/(float)nbPoint);
 
-        for (int j = 0; j <= nbPoint; j++) {
+        for (int j = 1; j < nbPoint; j++) {
             v = ((float)j/(float)nbPoint);
 
-            float * coord = new float[3];
-            coord[0] = 0.0;
-            coord[1] = 0.0;
-            coord[2] = 0.0;
 
-            for (int h = 0; h <= n; h++) {
-                for (int k = 0; k <= m; k++) {
-                    coord[0] += berstein(h,n,u) * berstein(k,m,v) * getCarrpoint(h,k).getX();
-                    coord[1] += berstein(h,n,u) * berstein(k,m,v) * getCarrpoint(h,k).getY();
-                    coord[2] += berstein(h,n,u) * berstein(k,m,v) * getCarrpoint(h,k).getZ();
+            if (i < nbPoint-1) {
+
+                float * coord = new float[3];
+                coord[0] = 0.0;
+                coord[1] = 0.0;
+                coord[2] = 0.0;
+
+                for (int h = 0; h <= n; h++) {
+                    for (int k = 0; k <= m; k++) {
+                        coord[0] += berstein(h,n,u) * berstein(k,m,v) * getCarrpoint(h,k).getX();
+                        coord[1] += berstein(h,n,u) * berstein(k,m,v) * getCarrpoint(h,k).getY();
+                        coord[2] += berstein(h,n,u) * berstein(k,m,v) * getCarrpoint(h,k).getZ();
+                    }
                 }
+
+                Point p;
+                p.set(coord);
+
+                res->append(p);
+
+
+                float u_bis = ((float)(i+1)/(float)nbPoint);
+
+                coord[0] = 0.0;
+                coord[1] = 0.0;
+                coord[2] = 0.0;
+
+                for (int h = 0; h <= n; h++) {
+                    for (int k = 0; k <= m; k++) {
+                        coord[0] += berstein(h,n,u_bis) * berstein(k,m,v) * getCarrpoint(h,k).getX();
+                        coord[1] += berstein(h,n,u_bis) * berstein(k,m,v) * getCarrpoint(h,k).getY();
+                        coord[2] += berstein(h,n,u_bis) * berstein(k,m,v) * getCarrpoint(h,k).getZ();
+                    }
+                }
+
+                Point p2;
+                p2.set(coord);
+
+                res->append(p2);
+
             }
 
-            Point p;
-            p.set(coord);
+            if (j < nbPoint-1) {
 
-            res->append(p);
+                float * coord = new float[3];
+
+                coord[0] = 0.0;
+                coord[1] = 0.0;
+                coord[2] = 0.0;
+
+                for (int h = 0; h <= n; h++) {
+                    for (int k = 0; k <= m; k++) {
+                        coord[0] += berstein(h,n,u) * berstein(k,m,v) * getCarrpoint(h,k).getX();
+                        coord[1] += berstein(h,n,u) * berstein(k,m,v) * getCarrpoint(h,k).getY();
+                        coord[2] += berstein(h,n,u) * berstein(k,m,v) * getCarrpoint(h,k).getZ();
+                    }
+                }
+
+                Point p;
+                p.set(coord);
+
+                res->append(p);
+
+                float v_bis = ((float)(j+1)/(float)nbPoint);
+
+                coord[0] = 0.0;
+                coord[1] = 0.0;
+                coord[2] = 0.0;
+
+                for (int h = 0; h <= n; h++) {
+                    for (int k = 0; k <= m; k++) {
+                        coord[0] += berstein(h,n,u) * berstein(k,m,v_bis) * getCarrpoint(h,k).getX();
+                        coord[1] += berstein(h,n,u) * berstein(k,m,v_bis) * getCarrpoint(h,k).getY();
+                        coord[2] += berstein(h,n,u) * berstein(k,m,v_bis) * getCarrpoint(h,k).getZ();
+                    }
+                }
+
+                Point p2;
+                p2.set(coord);
+
+                res->append(p2);
+
+            }
 
         }
     }
