@@ -69,8 +69,8 @@ private:
     QOpenGLBuffer m_vbo;
 
     void makeGLSegment(Point start, Point end);
-    void makeGLBezierCurve(Point p0, Point p1, Point p2, Point p3);
-    void makeGLBezierCarr(Point points[16]);
+    void makeGLBezierCurve(Point p0, Point p1, Point p2, Point p3, int presision);
+    void makeGLBezierCarr(Point points[16], int presision);
 	void tearGLObjects();
     void prepareOpenGl(QVector<Point> controlPoints, QVector<Point> bezierPoints);
 };

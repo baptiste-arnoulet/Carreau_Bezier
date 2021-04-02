@@ -60,56 +60,58 @@ void myOpenGLWidget::initializeGL()
 	initializeOpenGLFunctions();
 	glEnable(GL_DEPTH_TEST);
 
+    // Point de controle
     Point p0;
-    p0.set(new float[3]{-1.0 ,-1.4, 0.0});
+    p0.set(new float[3]{-0.75 ,-0.5, 0.75});
 
     Point p1;
-    p1.set(new float[3]{-0.4,1.2,0.0});
+    p1.set(new float[3]{-0.25,0.0,0.75});
 
     Point p2;
-    p2.set(new float[3]{1.3,0.8,0.0});
+    p2.set(new float[3]{0.25,0.0,0.75});
 
     Point p3;
-    p3.set(new float[3]{1.0,-0.7,0.0});
+    p3.set(new float[3]{0.75,-0.5,0.75});
 
     Point p4;
-    p4.set(new float[3]{-1.0 ,-0.8, -1.0});
+    p4.set(new float[3]{-0.75 ,0.0, 0.25});
 
     Point p5;
-    p5.set(new float[3]{-0.4,1.4,-1.0});
+    p5.set(new float[3]{-0.25,0.5,0.25});
 
     Point p6;
-    p6.set(new float[3]{1.3,1.1,-1.0});
+    p6.set(new float[3]{0.25,0.5,0.25});
 
     Point p7;
-    p7.set(new float[3]{1.0,-0.5,-1.0});
+    p7.set(new float[3]{0.75,0.0,0.25});
 
     Point p8;
-    p8.set(new float[3]{-1.0 ,-0.8, -2.0});
+    p8.set(new float[3]{-0.75 ,0.0, -0.25});
 
     Point p9;
-    p9.set(new float[3]{-0.4,1.5,-2.0});
+    p9.set(new float[3]{-0.25,0.5,-0.25});
 
     Point p10;
-    p10.set(new float[3]{1.3,1.1,-2.0});
+    p10.set(new float[3]{0.25,0.5,-0.25});
 
     Point p11;
-    p11.set(new float[3]{1.0,-0.4,-2.0});
+    p11.set(new float[3]{0.75,0.0,-0.25});
 
     Point p12;
-    p12.set(new float[3]{-1.0 ,-1.4, -3.0});
+    p12.set(new float[3]{-0.75 ,-0.5, -0.75});
 
     Point p13;
-    p13.set(new float[3]{-0.4,1.2,-3.0});
+    p13.set(new float[3]{-0.25,0.0,-0.75});
 
     Point p14;
-    p14.set(new float[3]{1.3,0.8,-3.0});
+    p14.set(new float[3]{0.25,0.0,-0.75});
 
     Point p15;
-    p15.set(new float[3]{1.0,-0.7,-3.0});
+    p15.set(new float[3]{0.75,-0.5,-0.75});
 
     Point carrPoints[16] = {p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15};
 
+    // Segment de contrôles
     makeGLSegment(p0, p1);
     makeGLSegment(p1, p2);
     makeGLSegment(p2, p3);
@@ -141,14 +143,8 @@ void myOpenGLWidget::initializeGL()
     makeGLSegment(p10, p14);
     makeGLSegment(p11, p15);
 
-
-    //makeGLBezierCurve(p0,p1,p2,p3);
-    //makeGLBezierCurve(p0,p4,p8,p12);
-    //makeGLBezierCurve(p3,p7,p11,p15);
-    //makeGLBezierCurve(p12,p13,p14,p15);
-
-    makeGLBezierCarr(carrPoints);
-
+    // Carreau de bezier
+    makeGLBezierCarr(carrPoints, 20);
 
     prepareOpenGl(*allControlPoints, *allBezierPoints);
 
@@ -169,7 +165,7 @@ void myOpenGLWidget::doProjection()
 	//modelMatrix.ortho( -aratio, aratio, -1.0f, 1.0f, -1.0f, 1.0f );
 }
 
-
+// Pour dessiner un segment
 void myOpenGLWidget::makeGLSegment(Point start, Point end)
 {
 	//1 Nos objets géométriques
@@ -202,15 +198,17 @@ void myOpenGLWidget::makeGLSegment(Point start, Point end)
     }
 }
 
-void myOpenGLWidget::makeGLBezierCurve(Point p0, Point p1, Point p2, Point p3)
+// Pour dessiner une courbe de bezier avec 4 point de contrôles
+void myOpenGLWidget::makeGLBezierCurve(Point p0, Point p1, Point p2, Point p3, int presision)
 {
-    CourbeBezier *cp = new CourbeBezier(p0, p1, p2, p3);
+    CourbeBezier *cp = new CourbeBezier(p0, p1, p2, p3, presision);
     allBezierPoints->append(*cp->parcoursBerstein());
 }
 
-void myOpenGLWidget::makeGLBezierCarr(Point points[])
+// Pour dessiner un carreau de bezier de degrés 3 * 3
+void myOpenGLWidget::makeGLBezierCarr(Point points[], int presision)
 {
-    CourbeBezier *cp = new CourbeBezier(points);
+    CourbeBezier *cp = new CourbeBezier(points, presision);
     allBezierPoints->append(*cp->parcoursCarreauBerstein());
 }
 

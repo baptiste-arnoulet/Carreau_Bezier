@@ -3,17 +3,17 @@
 
 #include "coubreBezier.h"
 
-CourbeBezier::CourbeBezier(Point p0, Point p1, Point p2, Point p3)
+CourbeBezier::CourbeBezier(Point p0, Point p1, Point p2, Point p3, int nbPoint)
 {
     listPoint.points[0] = p0;
     listPoint.points[1] = p1;
     listPoint.points[2] = p2;
     listPoint.points[3] = p3;
 
-    nbPoint = 50;
+    this->nbPoint = nbPoint;
 }
 
-CourbeBezier::CourbeBezier(Point points[])
+CourbeBezier::CourbeBezier(Point points[], int nbPoint)
 {
     for (int i =0; i<16; i++) {
         listCarrPoint.points[i] = points[i];
@@ -41,9 +41,10 @@ CourbeBezier::CourbeBezier(Point points[])
 
     listPoint = border1;
 
-    nbPoint = 10;
+    this->nbPoint = nbPoint;
 }
 
+// Forme une liste de points afin de dessiner une courbe de Bezier
 QVector<Point> *CourbeBezier::parcoursBerstein()
 {
     float t;
@@ -78,6 +79,7 @@ QVector<Point> *CourbeBezier::parcoursBerstein()
     return res;
 }
 
+//Forme une liste de points pour dessiner un carreau de Bezier
 QVector<Point> *CourbeBezier::parcoursCarreauBerstein()
 {
     float u,v;
@@ -107,9 +109,8 @@ QVector<Point> *CourbeBezier::parcoursCarreauBerstein()
             } else if (i == nbPoint && j == nbPoint) {
                 // DO nothing
             } else if (i == nbPoint) {
-                qDebug() << "ELSE I i : "<<i<<" j : "<<j;
 
-
+                //Gestion du coins u = 1 et v = 0
                 if (j == 0) {
                     res->append(getCarrpoint(n,0));
                 } else {
@@ -117,9 +118,9 @@ QVector<Point> *CourbeBezier::parcoursCarreauBerstein()
                     res->append(get2DPoint(m,v));
                 }
 
-
                 float v_bis = ((float)(j+1)/(float)nbPoint);
 
+                //Gestion du coins u = 1 et v = 1
                 if (v_bis == 1) {
                     res->append(getCarrpoint(n,m));
                 } else {
@@ -127,8 +128,8 @@ QVector<Point> *CourbeBezier::parcoursCarreauBerstein()
                     res->append(get2DPoint(m,v_bis));
                 }
             } else if (j == nbPoint) {
-                qDebug() << "ELSE J i : "<<i<<" j : "<<j;
 
+                //Gestion du coins u = 0 et v = 1
                 if (i == 0) {
                     res->append(getCarrpoint(0,m));
                 } else {
@@ -138,6 +139,7 @@ QVector<Point> *CourbeBezier::parcoursCarreauBerstein()
 
                 float u_bis = ((float)(i+1)/(float)nbPoint);
 
+                //Gestion du coins u = 1 et v = 1
                 if (u_bis == 1) {
                     res->append(getCarrpoint(n,m));
                 } else {
@@ -147,8 +149,7 @@ QVector<Point> *CourbeBezier::parcoursCarreauBerstein()
             }
 
             else if (i == nbPoint-1) {
-                qDebug() << "ELSE i-1 i : "<<i<<" j : "<<j;
-                //Gestion des coins
+                //Gestion du coins u = 0.9999 (i=nbPoint-1) et v = 0
                 if (j == 0) {
                     listPoint = border1;
                     res->append(get2DPoint(n,u));
@@ -159,7 +160,9 @@ QVector<Point> *CourbeBezier::parcoursCarreauBerstein()
                     res->append(get2DPoint(m,v));
                 }
 
-                //Gestion des coins
+                float v_bis = ((float)(j+1)/(float)nbPoint);
+
+                //Gestion du coins u = 0.9999 (i=nbPoint-1) et v = 0
                 if (j == 0) {
                     listPoint = border1;
                     res->append(get2DPoint(n,u));
@@ -167,8 +170,7 @@ QVector<Point> *CourbeBezier::parcoursCarreauBerstein()
                     res->append(get3DPoint(n,m,u,v));
                 }
 
-                float v_bis = ((float)(j+1)/(float)nbPoint);
-
+                //Gestion du coins u = 0.9999 (i=nbPoint-1) et v = 0.9999
                 if (j == nbPoint-1) {
                     listPoint = border4;
                     res->append(get2DPoint(n,u));
@@ -177,8 +179,7 @@ QVector<Point> *CourbeBezier::parcoursCarreauBerstein()
                 }
 
             } else if (j == nbPoint-1) {
-                qDebug() << "ELSE j-1 i : "<<i<<" j : "<<j;
-                //Gestion des coins
+
                 if (i==0) {
                     listPoint = border2;
                     res->append(get2DPoint(m,v));
@@ -190,7 +191,6 @@ QVector<Point> *CourbeBezier::parcoursCarreauBerstein()
 
                 res->append(get3DPoint(n,m,u_bis,v));
 
-                //Gestion des coins
                 if (i==0) {
                     listPoint = border2;
                     res->append(get2DPoint(m,v));
@@ -253,17 +253,20 @@ QVector<Point> *CourbeBezier::parcoursCarreauBerstein()
     return res;
 }
 
+// Polynome de berstein
 float CourbeBezier::berstein(int i, int n, float t)
 {
     return ((facto(n)/(facto(i)*facto(n-i))) * expo(t,i) * expo((1-t),(n-i)));
 }
 
+//Recupère un des sommets de controles pour un carreau de degré 3*3
 Point CourbeBezier::getCarrpoint(int i, int j)
 {
     int index = i + (j*4);
     return listCarrPoint.points[index];
 }
 
+//Retourne un point d'une courbe de bezier avec listPoint comme points de contrôle
 Point CourbeBezier::get2DPoint(int n, float t)
 {
     float * coord = new float[3];
@@ -287,6 +290,7 @@ Point CourbeBezier::get2DPoint(int n, float t)
     return p;
 }
 
+// retourne un point de la surface de bezier
 Point CourbeBezier::get3DPoint(int n, int m, float u, float v)
 {
     float * coord = new float[3];
