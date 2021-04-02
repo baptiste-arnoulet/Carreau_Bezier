@@ -243,9 +243,9 @@ void myOpenGLWidget::prepareOpenGl(Point p, QVector<Point> controlPoints, QVecto
     vertData.append(p.getX());
     vertData.append(p.getY());
     vertData.append(p.getZ());
-    vertData.append(0.0);
-    vertData.append(0.0);
     vertData.append(1.0);
+    vertData.append(0.0);
+    vertData.append(0.0);
 
 
     GLfloat * colors = new GLfloat[3];
@@ -354,13 +354,22 @@ void myOpenGLWidget::paintGL()
 
 void myOpenGLWidget::setU(float u)
 {
+    if (u <= 0 || u >= 1) return;
+
     this->u = u;
+
+    makeGLForm();
+
     update();
 }
 
 void myOpenGLWidget::setV(float v)
 {
+    if (v <= 0 || v >= 1) return;
     this->v = v;
+
+    makeGLForm();
+
     update();
 }
 
@@ -387,9 +396,6 @@ void myOpenGLWidget::keyPressEvent(QKeyEvent *ev)
         case Qt::Key_F :
             if (nbPoint<=3) break;
             nbPoint -= 1;
-            p = 1.0/(float) nbPoint;
-            u = 0;
-            v = 0;
 
             makeGLForm();
 
@@ -397,44 +403,6 @@ void myOpenGLWidget::keyPressEvent(QKeyEvent *ev)
             break;
         case Qt::Key_G :
             nbPoint += 1;
-            p = 1.0/(float) nbPoint;
-            u = 0;
-            v = 0;
-
-            makeGLForm();
-
-            update();
-            break;
-        case Qt::Key_U :
-            if (u >= 1) break;
-            u += p;
-
-
-            makeGLForm();
-
-            update();
-            break;
-        case Qt::Key_I :
-            if (u <= 0) break;
-            u -= p;
-
-
-            makeGLForm();
-
-            update();
-            break;
-        case Qt::Key_V :
-            if (v >= 1) break;
-            v += p;
-
-            makeGLForm();
-
-            update();
-            break;
-        case Qt::Key_B :
-            if (v <= 0) break;
-            v -= p;
-
 
             makeGLForm();
 

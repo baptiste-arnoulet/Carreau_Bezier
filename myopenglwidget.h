@@ -57,7 +57,7 @@ private:
     int nbPoint = 20;
     int n, m;
     float p = 1.0/(float)nbPoint;
-    float u = 0, v = 0;
+
     // Coordonnées paramétriques
     float u, v;
 

@@ -26,12 +26,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::setU(int u)
 {
-    this->ui->_u_lbl->setText("u = " + QString::number(u/10.f));
-    this->ui->openGLWidget->setU(u/10.f);
+    this->ui->_u_lbl->setText("u = " + QString::number(u/100.f));
+    this->ui->openGLWidget->setU(u/100.f);
 }
 
 void MainWindow::setV(int v)
 {
-    this->ui->_v_lbl->setText("v = " + QString::number(v/10.f));
-    this->ui->openGLWidget->setV(v/10.f);
+    this->ui->_v_lbl->setText("t = " + QString::number(v/100.f));
+    this->ui->openGLWidget->setV(v/100.f);
 }
