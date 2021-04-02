@@ -17,6 +17,10 @@ public:
 
 private:
 	Ui::MainWindow *ui;
+
+protected slots:
+    void setU(int u);
+    void setV(int v);
 };
 
 #endif // MAINWINDOW_H

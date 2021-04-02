@@ -13,9 +13,25 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
+
+    connect(this->ui->_btn_poly_1, &QPushButton::clicked, this->ui->openGLWidget, [this] { this->ui->openGLWidget->showPolyedre(1); });
+    connect(this->ui->_btn_poly_2, &QPushButton::clicked, this->ui->openGLWidget, [this] { this->ui->openGLWidget->showPolyedre(2); });
+    connect(this->ui->_btn_poly_3, &QPushButton::clicked, this->ui->openGLWidget, [this] { this->ui->openGLWidget->showPolyedre(3); });
 }
 
 MainWindow::~MainWindow()
 {
 	delete ui;
+}
+
+void MainWindow::setU(int u)
+{
+    this->ui->_u_lbl->setText("u = " + QString::number(u/10.f));
+    this->ui->openGLWidget->setU(u/10.f);
+}
+
+void MainWindow::setV(int v)
+{
+    this->ui->_v_lbl->setText("t = " + QString::number(v/10.f));
+    this->ui->openGLWidget->setV(v/10.f);
 }
