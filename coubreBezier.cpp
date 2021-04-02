@@ -13,31 +13,24 @@ CourbeBezier::CourbeBezier(Point p0, Point p1, Point p2, Point p3, int nbPoint)
     this->nbPoint = nbPoint;
 }
 
-CourbeBezier::CourbeBezier(Point points[], int nbPoint)
+CourbeBezier::CourbeBezier(Point points[], int nbPoint, int n, int m)
 {
-    for (int i =0; i<16; i++) {
-        listCarrPoint.points[i] = points[i];
+    this->n = n;
+    this->m = m;
+
+    for (int i =0; i<(n+1)*(m+1); i++) {
+        listCarrPoint.vecPoints->append(points[i]);
     }
 
-    border1.points[0] = points[0];
-    border1.points[1] = points[1];
-    border1.points[2] = points[2];
-    border1.points[3] = points[3];
+    for (int i = 0; i<=n; i++) {
+        border1.points[i] = points[i];
+        border4.points[i] = points[i+(m*(n+1))];
+    }
 
-    border2.points[0] = points[0];
-    border2.points[1] = points[4];
-    border2.points[2] = points[8];
-    border2.points[3] = points[12];
-
-    border3.points[0] = points[3];
-    border3.points[1] = points[7];
-    border3.points[2] = points[11];
-    border3.points[3] = points[15];
-
-    border4.points[0] = points[12];
-    border4.points[1] = points[13];
-    border4.points[2] = points[14];
-    border4.points[3] = points[15];
+    for (int i = 0; i<=m; i++) {
+        border2.points[i] = points[i*(n+1)];
+        border3.points[i] = points[n+(i*(n+1))];
+    }
 
     listPoint = border1;
 
@@ -48,7 +41,6 @@ CourbeBezier::CourbeBezier(Point points[], int nbPoint)
 QVector<Point> *CourbeBezier::parcoursBerstein()
 {
     float t;
-    int n = 3;
     QVector<Point> *res = new QVector<Point>;
 
     for (int i = 0; i < nbPoint; i++) {
@@ -83,7 +75,6 @@ QVector<Point> *CourbeBezier::parcoursBerstein()
 QVector<Point> *CourbeBezier::parcoursCarreauBerstein()
 {
     float u,v;
-    int n = 3, m = 3;
     QVector<Point> *res = new QVector<Point>;
 
     for (int i = 0; i <= nbPoint; i++) {
@@ -195,7 +186,7 @@ QVector<Point> *CourbeBezier::parcoursCarreauBerstein()
                     listPoint = border2;
                     res->append(get2DPoint(m,v));
 
-                    res->append(getCarrpoint(0,n));
+                    res->append(getCarrpoint(0,m));
                 } else {
                     res->append(get3DPoint(n,m,u,v));
 
@@ -262,8 +253,8 @@ float CourbeBezier::berstein(int i, int n, float t)
 //Recupère un des sommets de controles pour un carreau de degré 3*3
 Point CourbeBezier::getCarrpoint(int i, int j)
 {
-    int index = i + (j*4);
-    return listCarrPoint.points[index];
+    int index = i + (j*(n+1));
+    return listCarrPoint.vecPoints->value(index);
 }
 
 //Retourne un point d'une courbe de bezier avec listPoint comme points de contrôle
@@ -309,10 +300,6 @@ Point CourbeBezier::get3DPoint(int n, int m, float u, float v)
 
     Point p;
     p.set(coord);
-
-    if (coord[0] == 0.0 && coord[1] == 0.0 && coord[2] == 0.0) {
-        qDebug() << "0 3D pour u :" << u << " v : " << v;
-    }
 
     return p;
 }

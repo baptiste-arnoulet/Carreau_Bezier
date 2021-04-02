@@ -100,7 +100,7 @@ QVector<Point> *Segment::discretisation()
 
 QVector<Point> *Segment::parcours()
 {
-    float t{2.0};
+    float t;
     QVector<Point> *res = new QVector<Point>;
 
     for (int i = 0; i < nbPoint; i++) {

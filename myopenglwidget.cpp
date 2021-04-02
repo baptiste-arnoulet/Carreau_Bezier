@@ -109,6 +109,7 @@ void myOpenGLWidget::initializeGL()
     Point p15;
     p15.set(new float[3]{0.75,-0.5,-0.75});
 
+    Point carrPoints2[12] = {p0,p1,p2,p4,p5,p6,p8,p9,p10,p12,p13,p14};
     Point carrPoints[16] = {p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15};
 
     // Segment de contrôles
@@ -208,7 +209,7 @@ void myOpenGLWidget::makeGLBezierCurve(Point p0, Point p1, Point p2, Point p3, i
 // Pour dessiner un carreau de bezier de degrés 3 * 3
 void myOpenGLWidget::makeGLBezierCarr(Point points[], int presision)
 {
-    CourbeBezier *cp = new CourbeBezier(points, presision);
+    CourbeBezier *cp = new CourbeBezier(points, presision,3,3);
     allBezierPoints->append(*cp->parcoursCarreauBerstein());
 }
 
