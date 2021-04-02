@@ -23,6 +23,8 @@ myOpenGLWidget::myOpenGLWidget(QWidget *parent) :
     allControlPoints = new QVector<Point>;
     allBezierPoints = new QVector<Point>;
 
+    mode_aff = Mode_aff::lines;
+
 	QSurfaceFormat sf;
 	sf.setDepthBufferSize(24);
 	sf.setSamples(16);  // nb de sample par pixels : suréchantillonnage por l'antialiasing, en décalant à chaque fois le sommet
@@ -141,7 +143,7 @@ void myOpenGLWidget::initializeGL()
 
 
     //makeGLBezierCurve(p0,p1,p2,p3);
-    makeGLBezierCurve(p0,p4,p8,p12);
+    //makeGLBezierCurve(p0,p4,p8,p12);
     //makeGLBezierCurve(p3,p7,p11,p15);
     //makeGLBezierCurve(p12,p13,p14,p15);
 
@@ -190,10 +192,14 @@ void myOpenGLWidget::makeGLSegment(Point start, Point end)
     s->setStart(a);
     s->setEnd(b);
 
-	delete [] coord;
-    s->discretisation();
+    delete [] coord;
 
-    allControlPoints->append(*s->parcours());
+    if (mode_aff == Mode_aff::lines) {
+        allControlPoints->append(s->getStart());
+        allControlPoints->append(s->getEnd());
+    } else if (mode_aff == Mode_aff::points) {
+        allControlPoints->append(*s->discretisation());
+    }
 }
 
 void myOpenGLWidget::makeGLBezierCurve(Point p0, Point p1, Point p2, Point p3)
@@ -298,7 +304,12 @@ void myOpenGLWidget::paintGL()
 	m_program->enableAttributeArray("colAttr");
 
     glPointSize (5.0f);
-    glDrawArrays(GL_POINTS, 0, 50000);
+    glLineWidth(2.0f);
+    if (mode_aff == Mode_aff::lines) {
+        glDrawArrays(GL_LINES, 0, 50000);
+    } else if (mode_aff == Mode_aff::points) {
+        glDrawArrays(GL_POINTS, 0, 50000);
+    }
 
 	m_program->disableAttributeArray("posAttr");
 	m_program->disableAttributeArray("colAttr");

@@ -22,6 +22,12 @@ public:
 	explicit myOpenGLWidget(QWidget *parent = nullptr);
 	~myOpenGLWidget();
 
+    enum class Mode_aff {
+        points = 0, lines = 1
+    };
+
+    Mode_aff mode_aff;
+
 public slots:
 
 signals:  // On ne les implémente pas, elles seront générées par MOC ;

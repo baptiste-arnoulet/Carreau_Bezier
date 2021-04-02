@@ -47,9 +47,15 @@ private:
     float berstein(int i, int n, float t);
 
     ListPoint listPoint;
+    ListPoint border1;
+    ListPoint border2;
+    ListPoint border3;
+    ListPoint border4;
     ListCarrPoint listCarrPoint;
 
     Point getCarrpoint(int i, int j);
+    Point get2DPoint(int n, float t);
+    Point get3DPoint(int n, int m, float u, float v);
 };
 
 #endif // COUBREBEZIER_H
