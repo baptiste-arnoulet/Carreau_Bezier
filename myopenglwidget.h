@@ -24,9 +24,11 @@ public:
 
     enum class Mode_aff {
         points = 0, lines = 1
-    };
+    } mode_aff;
 
-    Mode_aff mode_aff;
+    void setU(float u);
+    void setV(float v);
+    void showPolyedre(int i);
 
 public slots:
 
@@ -52,6 +54,8 @@ private:
 	QTimer *m_timer = nullptr;
 	double m_ratio = 1;
     int nbPoint = 20;
+    // Coordonnées paramétriques
+    float u, v;
 
     struct Point3D{
         double x,y,z;

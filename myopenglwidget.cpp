@@ -330,6 +330,23 @@ void myOpenGLWidget::paintGL()
 	m_program->release();
 }
 
+void myOpenGLWidget::setU(float u)
+{
+    this->u = u;
+    update();
+}
+
+void myOpenGLWidget::setV(float v)
+{
+    this->v = v;
+    update();
+}
+
+void myOpenGLWidget::showPolyedre(int i)
+{
+
+}
+
 void myOpenGLWidget::keyPressEvent(QKeyEvent *ev)
 {
 	qDebug() << __FUNCTION__ << ev->text();
