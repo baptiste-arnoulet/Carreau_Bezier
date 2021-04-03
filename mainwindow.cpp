@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this->ui->_btn_poly_1, &QPushButton::clicked, this->ui->openGLWidget, [this] { this->ui->openGLWidget->showPolyedre(1); });
     connect(this->ui->_btn_poly_2, &QPushButton::clicked, this->ui->openGLWidget, [this] { this->ui->openGLWidget->showPolyedre(2); });
     connect(this->ui->_btn_poly_3, &QPushButton::clicked, this->ui->openGLWidget, [this] { this->ui->openGLWidget->showPolyedre(3); });
+    connect(this->ui->_btn_poly_4, &QPushButton::clicked, this->ui->openGLWidget, [this] { this->ui->openGLWidget->showPolyedre(4); });
 }
 
 MainWindow::~MainWindow()

@@ -117,6 +117,13 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="_btn_poly_4">
+         <property name="text">
+          <string>Polyèdre 4</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
@@ -128,7 +135,7 @@
      <x>0</x>
      <y>0</y>
      <width>904</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

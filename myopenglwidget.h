@@ -78,6 +78,7 @@ private:
     QVector<Point> *polyedre1;
     QVector<Point> *polyedre2;
     QVector<Point> *polyedre3;
+    QVector<Point> *polyedre4;
 
     Point getBezierPoint(float u, float v);
 

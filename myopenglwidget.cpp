@@ -113,6 +113,25 @@ void myOpenGLWidget::initializeGL()
     polyedre2 = new QVector<Point>{p0,p1,p2,p4,p5,p6,p8,p9,p10,p12,p13,p14,p15};
     polyedre3 = new QVector<Point>{p0,p1,p2,p4,p5,p6,p8,p9,p10};
 
+    p0.set(new float[3]{-1.0 ,-1.4, 0.0});
+    p1.set(new float[3]{-0.4,1.2,0.0});
+    p2.set(new float[3]{1.3,0.8,0.0});
+    p3.set(new float[3]{1.0,-0.7,0.0});
+    p4.set(new float[3]{-1.0 ,-0.8, -1.0});
+    p5.set(new float[3]{-0.4,1.4,-1.0});
+    p6.set(new float[3]{1.3,1.1,-1.0});
+    p7.set(new float[3]{1.0,-0.5,-1.0});
+    p8.set(new float[3]{-1.0 ,-0.8, -2.0});
+    p9.set(new float[3]{-0.4,1.5,-2.0});
+    p10.set(new float[3]{1.3,1.1,-2.0});
+    p11.set(new float[3]{1.0,-0.4,-2.0});
+    p12.set(new float[3]{-1.0 ,-1.4, -3.0});
+    p13.set(new float[3]{-0.4,1.2,-3.0});
+    p14.set(new float[3]{1.3,0.8,-3.0});
+    p15.set(new float[3]{1.0,-0.7,-3.0});
+
+    polyedre4 = new QVector<Point>{p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15};
+
     n = 3;
     m = 3;
 
@@ -402,6 +421,11 @@ void myOpenGLWidget::showPolyedre(int i)
             currentPolyedre = polyedre3;
             n = 2;
             m = 2;
+            break;
+        case 4 :
+            currentPolyedre = polyedre4;
+            n = 3;
+            m = 3;
             break;
     }
 
