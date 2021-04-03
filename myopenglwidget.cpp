@@ -184,12 +184,8 @@ void myOpenGLWidget::makeGLSegment(Point start, Point end)
 
     delete [] coord;
 
-    if (mode_aff == Mode_aff::lines) {
-        allControlPoints->append(s->getStart());
-        allControlPoints->append(s->getEnd());
-    } else if (mode_aff == Mode_aff::points) {
-        allControlPoints->append(*s->discretisation());
-    }
+    allControlPoints->append(s->getStart());
+    allControlPoints->append(s->getEnd());
 }
 
 // Pour dessiner une courbe de bezier avec 4 point de contrôles
