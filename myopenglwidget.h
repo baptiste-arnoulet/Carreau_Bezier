@@ -74,6 +74,11 @@ private:
     QVector<Point> *allControlPoints;
     QVector<Point> *allBezierPoints;
 
+    QVector<Point> *currentPolyedre;
+    QVector<Point> *polyedre1;
+    QVector<Point> *polyedre2;
+    QVector<Point> *polyedre3;
+
     Point getBezierPoint(float u, float v);
 
 	QOpenGLShaderProgram *m_program;

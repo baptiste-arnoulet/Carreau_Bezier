@@ -23,9 +23,6 @@ myOpenGLWidget::myOpenGLWidget(QWidget *parent) :
     allControlPoints = new QVector<Point>;
     allBezierPoints = new QVector<Point>;
 
-    n = 3;
-    m = 3;
-
     mode_aff = Mode_aff::lines;
 
 	QSurfaceFormat sf;
@@ -64,7 +61,62 @@ void myOpenGLWidget::initializeGL()
 	glEnable(GL_DEPTH_TEST);
 
     // Point de controle
+    Point p0;
+    p0.set(new float[3]{-0.75 ,-0.5, 0.75});
 
+    Point p1;
+    p1.set(new float[3]{-0.25,0.0,0.75});
+
+    Point p2;
+    p2.set(new float[3]{0.25,0.0,0.75});
+
+    Point p3;
+    p3.set(new float[3]{0.75,-0.5,0.75});
+
+    Point p4;
+    p4.set(new float[3]{-0.75 ,0.0, 0.25});
+
+    Point p5;
+    p5.set(new float[3]{-0.25,0.5,0.25});
+
+    Point p6;
+    p6.set(new float[3]{0.25,0.5,0.25});
+
+    Point p7;
+    p7.set(new float[3]{0.75,0.0,0.25});
+
+    Point p8;
+    p8.set(new float[3]{-0.75 ,0.0, -0.25});
+
+    Point p9;
+    p9.set(new float[3]{-0.25,0.5,-0.25});
+
+    Point p10;
+    p10.set(new float[3]{0.25,0.5,-0.25});
+
+    Point p11;
+    p11.set(new float[3]{0.75,0.0,-0.25});
+
+    Point p12;
+    p12.set(new float[3]{-0.75 ,-0.5, -0.75});
+
+    Point p13;
+    p13.set(new float[3]{-0.25,0.0,-0.75});
+
+    Point p14;
+    p14.set(new float[3]{0.25,0.0,-0.75});
+
+    Point p15;
+    p15.set(new float[3]{0.75,-0.5,-0.75});
+
+    polyedre1 = new QVector<Point>{p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15};
+    polyedre2 = new QVector<Point>{p0,p1,p2,p4,p5,p6,p8,p9,p10,p12,p13,p14,p15};
+    polyedre3 = new QVector<Point>{p0,p1,p2,p4,p5,p6,p8,p9,p10};
+
+    n = 3;
+    m = 3;
+
+    currentPolyedre = polyedre1;
 
     //Point carrPoints2[12] = {p0,p1,p2,p4,p5,p6,p8,p9,p10,p12,p13,p14};
     //Point carrPoints[16] = {p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15};
@@ -140,92 +192,52 @@ void myOpenGLWidget::makeGLForm()
     allControlPoints->clear();
     allBezierPoints->clear();
 
-    Point p0;
-    p0.set(new float[3]{-0.75 ,-0.5, 0.75});
+    for (int j = 0; j <= m; j++) {
+        for (int i = 0; i<n; i++) {
+            makeGLSegment(currentPolyedre->value(((n+1)*j)+i), currentPolyedre->value(((n+1)*j)+i+1));
+        }
+    }
 
-    Point p1;
-    p1.set(new float[3]{-0.25,0.0,0.75});
-
-    Point p2;
-    p2.set(new float[3]{0.25,0.0,0.75});
-
-    Point p3;
-    p3.set(new float[3]{0.75,-0.5,0.75});
-
-    Point p4;
-    p4.set(new float[3]{-0.75 ,0.0, 0.25});
-
-    Point p5;
-    p5.set(new float[3]{-0.25,0.5,0.25});
-
-    Point p6;
-    p6.set(new float[3]{0.25,0.5,0.25});
-
-    Point p7;
-    p7.set(new float[3]{0.75,0.0,0.25});
-
-    Point p8;
-    p8.set(new float[3]{-0.75 ,0.0, -0.25});
-
-    Point p9;
-    p9.set(new float[3]{-0.25,0.5,-0.25});
-
-    Point p10;
-    p10.set(new float[3]{0.25,0.5,-0.25});
-
-    Point p11;
-    p11.set(new float[3]{0.75,0.0,-0.25});
-
-    Point p12;
-    p12.set(new float[3]{-0.75 ,-0.5, -0.75});
-
-    Point p13;
-    p13.set(new float[3]{-0.25,0.0,-0.75});
-
-    Point p14;
-    p14.set(new float[3]{0.25,0.0,-0.75});
-
-    Point p15;
-    p15.set(new float[3]{0.75,-0.5,-0.75});
+    for (int i = 0; i <= n; i++) {
+        for (int j = 0; j<m; j++) {
+            makeGLSegment(currentPolyedre->value(((n+1)*j)+i), currentPolyedre->value(((n+1)*(j+1))+i));
+        }
+    }
 
     // Segment de contrôles
-    makeGLSegment(p0, p1);
+    /*makeGLSegment(p0, p1);
     makeGLSegment(p1, p2);
-    makeGLSegment(p2, p3);
+    //makeGLSegment(p2, p3);
 
     makeGLSegment(p4, p5);
     makeGLSegment(p5, p6);
-    makeGLSegment(p6, p7);
+    //makeGLSegment(p6, p7);
 
     makeGLSegment(p8, p9);
     makeGLSegment(p9, p10);
-    makeGLSegment(p10, p11);
+    //makeGLSegment(p10, p11);
 
     makeGLSegment(p12, p13);
     makeGLSegment(p13, p14);
-    makeGLSegment(p14, p15);
+    //makeGLSegment(p14, p15);*/
 
-    makeGLSegment(p0, p4);
+    /*makeGLSegment(p0, p4);
     makeGLSegment(p1, p5);
     makeGLSegment(p2, p6);
-    makeGLSegment(p3, p7);
+    //makeGLSegment(p3, p7);
 
     makeGLSegment(p4, p8);
     makeGLSegment(p5, p9);
     makeGLSegment(p6, p10);
-    makeGLSegment(p7, p11);
+    //makeGLSegment(p7, p11);
 
     makeGLSegment(p8, p12);
     makeGLSegment(p9, p13);
     makeGLSegment(p10, p14);
-    makeGLSegment(p11, p15);
-
-
-
-    QVector<Point> *carrPoints = new QVector<Point>{p0,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15};
+    //makeGLSegment(p11, p15);*/
 
     // Carreau de bezier
-    makeGLBezierCarr(carrPoints, nbPoint);
+    makeGLBezierCarr(currentPolyedre, nbPoint);
 
     prepareOpenGl(getBezierPoint(u,v), *allControlPoints, *allBezierPoints);
 }
@@ -375,7 +387,26 @@ void myOpenGLWidget::setV(float v)
 
 void myOpenGLWidget::showPolyedre(int i)
 {
+    switch (i) {
+        case 1 :
+            currentPolyedre = polyedre1;
+            n = 3;
+            m = 3;
+            break;
+        case 2 :
+            currentPolyedre = polyedre2;
+            n = 2;
+            m = 3;
+            break;
+        case 3 :
+            currentPolyedre = polyedre3;
+            n = 2;
+            m = 2;
+            break;
+    }
 
+    makeGLForm();
+    update();
 }
 
 void myOpenGLWidget::keyPressEvent(QKeyEvent *ev)
@@ -389,9 +420,10 @@ void myOpenGLWidget::keyPressEvent(QKeyEvent *ev)
 			update();
 			break;
 		case Qt::Key_A :
-			if (m_timer->isActive())
+            if (m_timer->isActive()) {
+                m_angle = 0;
 				m_timer->stop();
-			else m_timer->start();
+            } else m_timer->start();
 			break;
         case Qt::Key_F :
             if (nbPoint<=3) break;
