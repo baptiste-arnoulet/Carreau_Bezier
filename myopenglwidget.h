@@ -30,6 +30,7 @@ public:
     void setU(float u);
     void setV(float v);
     void showPolyedre(int i);
+    void toggleDisplayMode();
 
 public slots:
 
@@ -59,17 +60,14 @@ private:
     float p = 1.0/(float)nbPoint;
 
     // Coordonnées paramétriques
-    float u, v;
+    float u = 0.5f, v = 0.5f;
 
     struct Point3D{
         double x,y,z;
     };
 
 
-	//RR matrices utiles
-	QMatrix4x4 m_modelView;
-	QMatrix4x4 m_projection;
-	QMatrix4x4 m_model;
+    //RR matrices utiles
 
     QVector<Point> *allControlPoints;
     QVector<Point> *allBezierPoints;

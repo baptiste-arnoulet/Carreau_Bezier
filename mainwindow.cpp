@@ -36,3 +36,14 @@ void MainWindow::setV(int v)
     this->ui->_v_lbl->setText("t = " + QString::number(v/100.f));
     this->ui->openGLWidget->setV(v/100.f);
 }
+
+void MainWindow::toggleDisplayMode()
+{
+    toggled = !toggled;
+    if (toggled) {
+        this->ui->_btn_display_mode->setText("Passer en mode lignes");
+    } else {
+        this->ui->_btn_display_mode->setText("Passer en mode points");
+    }
+    this->ui->openGLWidget->toggleDisplayMode();
+}

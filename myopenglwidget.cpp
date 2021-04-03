@@ -223,38 +223,6 @@ void myOpenGLWidget::makeGLForm()
         }
     }
 
-    // Segment de contrôles
-    /*makeGLSegment(p0, p1);
-    makeGLSegment(p1, p2);
-    //makeGLSegment(p2, p3);
-
-    makeGLSegment(p4, p5);
-    makeGLSegment(p5, p6);
-    //makeGLSegment(p6, p7);
-
-    makeGLSegment(p8, p9);
-    makeGLSegment(p9, p10);
-    //makeGLSegment(p10, p11);
-
-    makeGLSegment(p12, p13);
-    makeGLSegment(p13, p14);
-    //makeGLSegment(p14, p15);*/
-
-    /*makeGLSegment(p0, p4);
-    makeGLSegment(p1, p5);
-    makeGLSegment(p2, p6);
-    //makeGLSegment(p3, p7);
-
-    makeGLSegment(p4, p8);
-    makeGLSegment(p5, p9);
-    makeGLSegment(p6, p10);
-    //makeGLSegment(p7, p11);
-
-    makeGLSegment(p8, p12);
-    makeGLSegment(p9, p13);
-    makeGLSegment(p10, p14);
-    //makeGLSegment(p11, p15);*/
-
     // Carreau de bezier
     makeGLBezierCarr(currentPolyedre, nbPoint);
 
@@ -331,33 +299,28 @@ void myOpenGLWidget::resizeGL(int w, int h)
 
 void myOpenGLWidget::paintGL()
 {
-	qDebug() << __FUNCTION__ ;
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
+    QMatrix4x4 m_modelView;
+    QMatrix4x4 m_projection;
+    QMatrix4x4 m_model;
 
 	m_program->bind(); // active le shader program
 
+    m_modelView.setToIdentity();
+    m_modelView.lookAt(QVector3D(0.0f, 0.0f, 3.0f),    // Camera Position
+                       QVector3D(0.0f, 0.0f, 0.0f),    // Point camera looks towards
+                       QVector3D(0.0f, 1.0f, 0.0f));   // Up vector
 
-	/// Ajout RR pour gérer les 3 matrices utiles
-	/// à mettre dans doProjection() pour clarifier
-	/// -----------------------------------------
-		m_modelView.setToIdentity();
-		m_modelView.lookAt(QVector3D(0.0f, 0.0f, 3.0f),    // Camera Position
-						 QVector3D(0.0f, 0.0f, 0.0f),    // Point camera looks towards
-						 QVector3D(0.0f, 1.0f, 0.0f));   // Up vector
+    m_projection.setToIdentity ();
+    m_projection.perspective(70.0, width() / height(), 0.1, 100.0); //ou m_ratio
 
-		m_projection.setToIdentity ();
-		m_projection.perspective(70.0, width() / height(), 0.1, 100.0); //ou m_ratio
+    //m_model.translate(0, 0, -3.0);
 
-        //m_model.translate(0, 0, -3.0);
+    // Rotation de la scène pour l'animation
+    m_model.rotate(m_angle, 0, 1, 0);
 
-		// Rotation de la scène pour l'animation
-		m_model.rotate(m_angle, 0, 1, 0);
-
-		QMatrix4x4 m = m_projection * m_modelView * m_model;
-    /// ----------------------------
+    QMatrix4x4 m = m_projection * m_modelView * m_model;
 
 	m_program->setUniformValue("matrix", m);
 
@@ -366,15 +329,17 @@ void myOpenGLWidget::paintGL()
 	m_program->enableAttributeArray("posAttr");
 	m_program->enableAttributeArray("colAttr");
 
-    glPointSize (5.0f);
-    glLineWidth(2.0f);
-
+    glPointSize (10.0f);
     glDrawArrays(GL_POINTS, 0, 1);
 
+    glLineWidth(2.0f);
+    glDrawArrays(GL_LINES, 1, allControlPoints->size());
+
+    glPointSize (5.0f);
     if (mode_aff == Mode_aff::lines) {
-        glDrawArrays(GL_LINES, 1, 50000);
+        glDrawArrays(GL_LINES, 1 + allControlPoints->size(), allBezierPoints->size());
     } else if (mode_aff == Mode_aff::points) {
-        glDrawArrays(GL_POINTS, 1, 50000);
+        glDrawArrays(GL_POINTS, 1 + allControlPoints->size(), allBezierPoints->size());
     }
 
 	m_program->disableAttributeArray("posAttr");
@@ -433,16 +398,21 @@ void myOpenGLWidget::showPolyedre(int i)
     update();
 }
 
+void myOpenGLWidget::toggleDisplayMode()
+{
+    if (mode_aff == Mode_aff::points) {
+        mode_aff = Mode_aff::lines;
+    } else {
+        mode_aff = Mode_aff::points;
+    }
+    update();
+}
+
 void myOpenGLWidget::keyPressEvent(QKeyEvent *ev)
 {
 	qDebug() << __FUNCTION__ << ev->text();
 
-	switch(ev->key()) {
-		case Qt::Key_Z :
-			m_angle += 1;
-			if (m_angle >= 360) m_angle -= 360;
-			update();
-			break;
+    switch(ev->key()) {
 		case Qt::Key_A :
             if (m_timer->isActive()) {
                 m_angle = 0;
@@ -491,8 +461,8 @@ void myOpenGLWidget::mouseMoveEvent(QMouseEvent *ev)
 
 void myOpenGLWidget::onTimeout()
 {
-	qDebug() << __FUNCTION__ ;
-
+    m_angle += 1;
+    if (m_angle > 360) m_angle -= 360;
 	update();
 }
 

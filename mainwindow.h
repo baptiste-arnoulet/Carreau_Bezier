@@ -17,10 +17,12 @@ public:
 
 private:
 	Ui::MainWindow *ui;
+    bool toggled = false;
 
 protected slots:
     void setU(int u);
     void setV(int v);
+    void toggleDisplayMode();
 };
 
 #endif // MAINWINDOW_H

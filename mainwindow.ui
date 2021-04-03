@@ -39,7 +39,7 @@
        <item>
         <widget class="QLabel" name="_u_lbl">
          <property name="text">
-          <string>u = 0</string>
+          <string>u = 0.5</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -50,6 +50,9 @@
         <widget class="QSlider" name="_u_slider">
          <property name="maximum">
           <number>100</number>
+         </property>
+         <property name="value">
+          <number>50</number>
          </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -66,7 +69,7 @@
        <item>
         <widget class="QLabel" name="_v_lbl">
          <property name="text">
-          <string>v = 0</string>
+          <string>v = 0.5</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -78,8 +81,31 @@
          <property name="maximum">
           <number>100</number>
          </property>
+         <property name="value">
+          <number>50</number>
+         </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="_btn_display_mode">
+         <property name="text">
+          <string>Passer en mode points</string>
          </property>
         </widget>
        </item>
@@ -135,7 +161,7 @@
      <x>0</x>
      <y>0</y>
      <width>904</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -197,9 +223,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>_btn_display_mode</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>toggleDisplayMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>776</x>
+     <y>313</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>692</x>
+     <y>332</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>setU(int)</slot>
   <slot>setV(int)</slot>
+  <slot>toggleDisplayMode()</slot>
  </slots>
 </ui>
